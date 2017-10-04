@@ -1,0 +1,25 @@
+{
+    "name": "arhone/trigger",
+    "description": "Триггер PHP",
+    "homepage": "https://github.com/arhone/router",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Алексей Арх",
+            "email": "info@arh.one"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "arhone\\trigger\\": ""
+        },
+        "classmap": [
+            "Trigger.php"
+        ]
+    },
+    "minimum-stability": "stable",
+    "require": {
+        "php": "^7.0"
+    }
+}

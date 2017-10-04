@@ -1,7 +1,7 @@
 {
     "name": "arhone/trigger",
-    "description": "Триггер PHP",
-    "homepage": "https://github.com/arhone/router",
+    "description": "Триггер (PHP 7)",
+    "homepage": "https://github.com/arhone/trigger",
     "type": "library",
     "license": "MIT",
     "authors": [

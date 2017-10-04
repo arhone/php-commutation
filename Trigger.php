@@ -38,10 +38,10 @@ class Trigger {
     /**
      * Добавляет обработчик
      *
-     * @param string $action
+     * @param string|int $action
      * @param callable $callback
      */
-    public function handler (string $action, callable $callback) {
+    public function handler ($action, callable $callback) {
 
         self::$handler[$action][] = $callback;
 
@@ -50,11 +50,12 @@ class Trigger {
     /**
      * Запуск обработчиков события
      *
-     * @param string $action
-     * @param mixed $data
+     * @param string|int $action
+     * @param null $data
+     * @param bool $stack
      * @return mixed
      */
-    public function run (string $action, $data = null) {
+    public function event ($action, $data = null, $stack = false) {
 
         foreach (self::$handler as $key => $handlerList) {
 
@@ -62,36 +63,15 @@ class Trigger {
 
                 foreach ($handlerList as $callback) {
 
-                    if ($response = $callback->__invoke($match, $data)) {
+                    if ($stack) {
+
+                        $data = $callback->__invoke($match, $data);
+
+                    } elseif ($response = $callback->__invoke($match, $data)) {
 
                         return $response;
 
                     }
-
-                }
-
-            }
-
-        }
-
-    }
-
-    /**
-     * Обработка события стеком обработчиков
-     *
-     * @param string $action
-     * @param mixed $data
-     * @return mixed
-     */
-    public function stack (string $action, $data = null) {
-
-        foreach (self::$handler as $key => $handlerList) {
-
-            if (preg_match('~^' . $key . '$~ui', $action, $match)) {
-
-                foreach ($handlerList as $callback) {
-
-                    $data = $callback->__invoke($match, $data);
 
                 }
 

@@ -15,11 +15,11 @@ use arhone\trigger\Trigger;
 
 $Trigger = new Trigger();
 
-$Trigger->handler('HTTP:GET:/home.html', function () {
+$Trigger->add('HTTP:GET:/home.html', function () {
     return 'hello word'; 
 });
 
-echo $Trigger->event('HTTP:GET:/home.html');
+echo $Trigger->run('HTTP:GET:/home.html');
 ```
  
 Можно внедрять посредников (Middleware)
@@ -31,19 +31,19 @@ use arhone\trigger\Trigger;
 $Trigger = new Trigger();
 
 // Проверяем если пользователь не авторизован
-$Trigger->handler('HTTP:GET:/home.html', function () {
+$Trigger->add('HTTP:GET:/home.html', function () {
     if (User::id() == false) {
         return 'Нужно авторизироваться';
     }
 });
 
 // Или выводим приветствие
-$Trigger->handler('HTTP:GET:/home.html', function () {
+$Trigger->add('HTTP:GET:/home.html', function () {
     return 'Привет'; 
 });
 
 // Пользователь зашёл по HTTP типа GET на страницу /home.html
-echo $Trigger->event('HTTP:GET:/home.html');
+echo $Trigger->run('HTTP:GET:/home.html');
 ``` 
 
 Можно реагировать на события (OBServer)
@@ -55,12 +55,12 @@ use arhone\trigger\Trigger;
 $Trigger = new Trigger();
 
 // Очищаем кеш новостей
-$Trigger->handler('module.news.add', function ($data) {
+$Trigger->add('module.news.add', function ($data) {
     Cache::clear('module.news');
 });
 
 // Событие что была добавлена новость с id 100
-$Trigger->event('module.news.add', [
+$Trigger->run('module.news.add', [
     'id' => 100
 ]);
 ``` 
@@ -74,17 +74,17 @@ use arhone\trigger\Trigger;
 $Trigger = new Trigger();
 
 // Пишем кеш в Redis
-$Trigger->handler('cache:set', function ($key, $data) {
+$Trigger->add('cache:set', function ($key, $data) {
     CacheRedis::set($key, $data);
 });
 
 // Пишем в файл на всяких случай
-$Trigger->handler('cache:set', function ($key, $data) {
+$Trigger->add('cache:set', function ($key, $data) {
     CacheFile::set($key, $data);
 });
 
 // Генерируем команду на очистку кеша
-$Trigger->event('cache:set', 'ключ', 'данные для кеширования');
+$Trigger->run('cache:set', 'ключ', 'данные для кеширования');
 ``` 
 
 ```php
@@ -94,19 +94,19 @@ use arhone\trigger\Trigger;
 $Trigger = new Trigger();
 
 // Берём кеш из редиса, если сервер редиса доступен
-$Trigger->handler('cache:get', function ($key, $data) {
+$Trigger->add('cache:get', function ($key, $data) {
     if (CacheRedis::status() == true) {
         return CacheRedis::get($key, $data);    
     }
 });
 
 // Если редис ничего не вернул, то запустится следующий обработчик и вернёт кеш из файла
-$Trigger->handler('cache:get', function ($key, $data) {
+$Trigger->add('cache:get', function ($key, $data) {
    return CacheFile::get($key, $data);
 });
 
 // Генерируем команду на получение кеша
-$Trigger->event('cache:set', 'ключ');
+$Trigger->run('cache:set', 'ключ');
 ``` 
 
 Можно обрабатывать данные стеком обработчиков
@@ -116,16 +116,16 @@ use arhone\trigger\Trigger;
 
 $Trigger = new Trigger();
 
-$Trigger->handler('hello', function ($string) {
+$Trigger->add('hello', function ($string) {
     return $string . ' мой';
 });
-$Trigger->handler('hello', function ($string) {
+$Trigger->add('hello', function ($string) {
     return $string . ' дорогой';
 });
-$Trigger->handler('hello', function ($string) {
+$Trigger->add('hello', function ($string) {
     return $string . ' друг';
 });
 
 // Третий параметр разрешает stack обработку
-echo $Trigger->event('hello', 'Привет', true); // Привет мой дорогой друг
+echo $Trigger->run('hello', 'Привет', true); // Привет мой дорогой друг
 ``` 

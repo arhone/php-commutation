@@ -7,7 +7,7 @@ namespace arhone\trigger;
  * Class Trigger
  * @package arhone\trigger
  */
-class Trigger {
+class Trigger implements TriggerInterface {
 
     /**
      * Конфигурация класса

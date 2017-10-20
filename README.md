@@ -46,7 +46,7 @@ $Trigger->add('HTTP:GET:/home.html', function () {
 echo $Trigger->run('HTTP:GET:/home.html');
 ``` 
 
-Можно реагировать на события (OBServer)
+Можно реагировать на события (Observer)
 
 ```php
 <?php
@@ -54,7 +54,7 @@ use arhone\trigger\Trigger;
 
 $Trigger = new Trigger();
 
-// Очищаем кеш новостей
+// Очищаем кэш новостей
 $Trigger->add('module.news.add', function ($data) {
     Cache::clear('module.news');
 });
@@ -73,18 +73,21 @@ use arhone\trigger\Trigger;
 
 $Trigger = new Trigger();
 
-// Пишем кеш в Redis
-$Trigger->add('cache:set', function ($key, $data) {
-    CacheRedis::set($key, $data);
+// Пишем кэш в Redis
+$Trigger->add('cache:set', function ($data) {
+    CacheRedis::set($data['key'], $data['value']);
 });
 
 // Пишем в файл на всяких случай
-$Trigger->add('cache:set', function ($key, $data) {
-    CacheFile::set($key, $data);
+$Trigger->add('cache:set', function ($data) {
+    CacheRedis::set($data['key'], $data['value']);
 });
 
-// Генерируем команду на очистку кеша
-$Trigger->run('cache:set', 'ключ', 'данные для кеширования');
+// Генерируем команду на очистку кэша
+$Trigger->run('cache:set', [
+    'key' => 'ключ', 
+    'value' => 'данные для кэширования'
+]);
 ``` 
 
 ```php
@@ -93,20 +96,22 @@ use arhone\trigger\Trigger;
 
 $Trigger = new Trigger();
 
-// Берём кеш из редиса, если сервер редиса доступен
-$Trigger->add('cache:get', function ($key, $data) {
+// Берём кэш из редиса, если сервер редиса доступен
+$Trigger->add('cache:get', function ($data) {
     if (CacheRedis::status() == true) {
-        return CacheRedis::get($key, $data);    
+        return CacheRedis::get($data['key']);    
     }
+}, true); // Третий параметр break, остановит стек, если обработчик что то вернул (не null)
+
+// Если редис ничего не вернул, то запустится следующий обработчик и вернёт кэш из файла
+$Trigger->add('cache:get', function ($data) {
+   return CacheFile::get($data['key']);
 });
 
-// Если редис ничего не вернул, то запустится следующий обработчик и вернёт кеш из файла
-$Trigger->add('cache:get', function ($key, $data) {
-   return CacheFile::get($key, $data);
-});
-
-// Генерируем команду на получение кеша
-$Trigger->run('cache:set', 'ключ');
+// Генерируем команду на получение кэша
+$Trigger->run('cache:set', [
+    'key' => 'ключ'
+]);
 ``` 
 
 Можно обрабатывать данные стеком обработчиков
@@ -127,5 +132,5 @@ $Trigger->add('hello', function ($string) {
 });
 
 // Третий параметр разрешает stack обработку
-echo $Trigger->run('hello', 'Привет', true); // Привет мой дорогой друг
+echo $Trigger->run('hello', 'Привет'); // Привет мой дорогой друг
 ``` 

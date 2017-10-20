@@ -131,6 +131,5 @@ $Trigger->add('hello', function ($string) {
     return $string . ' друг';
 });
 
-// Третий параметр разрешает stack обработку
 echo $Trigger->run('hello', 'Привет'); // Привет мой дорогой друг
 ``` 

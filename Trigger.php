@@ -55,7 +55,7 @@ class Trigger implements TriggerInterface {
      *
      * @param $action
      * @param null $data
-     * @return null
+     * @return mixed
      */
     public function run ($action, $data = null) {
 

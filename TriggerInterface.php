@@ -18,7 +18,7 @@ interface TriggerInterface {
 
     /**
      * Добавляет обработчик
-     *
+     * 
      * @param $action
      * @param callable $callback
      * @param bool $break
@@ -30,7 +30,7 @@ interface TriggerInterface {
      *
      * @param $action
      * @param null $data
-     * @return null
+     * @return mixed
      */
     public function run ($action, $data = null);
 

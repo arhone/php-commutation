@@ -236,7 +236,7 @@ $Trigger->add('cache:set', function ($match, $data) {
 
 // Пишем в файл на всякий случай
 $Trigger->add('cache:set', function ($match, $data) {
-    CacheRedis::set($data['key'], $data['value']);
+    CacheFile::set($data['key'], $data['value']);
 });
 
 // Генерируем команду на запись в кэш

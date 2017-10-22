@@ -267,7 +267,7 @@ $Trigger->add('cache:get', function ($match, $data) {
 });
 
 // Генерируем команду на получение кэша
-$Trigger->run('cache:set', [
+$Trigger->run('cache:get', [
     'key' => 'ключ'
 ]);
 ``` 

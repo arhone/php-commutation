@@ -93,12 +93,13 @@ class Trigger implements TriggerInterface {
 
     /**
      * Метод для конфигурации класса
-     *
+     * 
      * @param array $config
+     * @return array
      */
-    public function config (array $config) {
+    public function config (array $config) : array {
 
-        self::$config = array_merge(self::$config, $config);
+        return self::$config = array_merge(self::$config, $config);
 
     }
 

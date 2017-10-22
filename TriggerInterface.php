@@ -36,9 +36,10 @@ interface TriggerInterface {
 
     /**
      * Метод для конфигурации класса
-     *
+     * 
      * @param array $config
+     * @return array
      */
-    public function config (array $config);
+    public function config (array $config) : array;
 
 }

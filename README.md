@@ -3,6 +3,18 @@
 
 Trigger позволяет создавать событийные приложения.
 
+# Установка
+
+```composer require arhone/trigger```
+
+```php
+<?php
+use arhone\trigger\Trigger;
+include 'vendor/autoload.php';
+
+$Trigger = new Trigger();
+```
+
 # Применение
 Триггер можно использовать для управления маршрутами (Router)
 
@@ -50,7 +62,7 @@ echo $Trigger->run('HTTP:GET:/home.html');
 
 ```php
 <?php
-use arhone\trigger\Trigger;
+use arhone\trigger\TriggerInterface;
 
 $Trigger = new Trigger();
 
@@ -69,7 +81,7 @@ $Trigger->run('module.news.add', [
 
 ```php
 <?php
-use arhone\trigger\Trigger;
+use arhone\trigger\TriggerInterface;
 
 $Trigger = new Trigger();
 

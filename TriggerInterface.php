@@ -30,7 +30,7 @@ interface TriggerInterface {
      *
      * @param string $pattern
      * @param callable $callback
-     * @param array $option ['skip', 'break']
+     * @param array $option ['status', 'break']
      * @return int|string
      */
     public function add (string $pattern, callable $callback, array $option = []);
@@ -45,12 +45,12 @@ interface TriggerInterface {
     public function run (string $action, $data = null);
 
     /**
-     * Тест триггера
+     * Порядок очереди триггера
      * 
      * @param string $action
      * @return array
      */
-    public function stack (string $action);
+    public function plan (string $action);
 
     /**
      * Метод для конфигурации класса

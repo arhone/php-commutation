@@ -48,11 +48,12 @@ $Trigger->add('событие', function () {
 echo $Trigger->run('событие'); // ответ
 ```
 
-##### Триггер понимает регулярные выражения.
+##### Триггер понимает регулярные выражения
 
-В обработчик приходят два аргумента
+В обработчик приходят три аргумента
 1) $match - Массив с совпадениями
 2) $data - Данные, переданные вторым параметром в метод run
+3) $option - Массив с настройками
 
 ```php
 <?php
@@ -61,7 +62,7 @@ use arhone\trigger\Trigger;
 $Trigger = new Trigger();
 
 // Добавляем обработчик
-$Trigger->add('switch:(on|off)', function ($match, $data) {
+$Trigger->add('switch:(on|off)', function ($match, $data, $option) {
 
     if ($match[1] == 'on') {
         return $data . ' - Включен';
@@ -75,7 +76,7 @@ $Trigger->add('switch:(on|off)', function ($match, $data) {
 echo $Trigger->run('switch:on', 'Чайник'); // Чайник - Включен
 ```
 
-##### Регистрация нескольких обработчиков.
+##### Регистрация нескольких обработчиков
 
 Ответ предыдущего обработчика, будет передан следующему в $data
 
@@ -105,11 +106,11 @@ $Trigger->add('switch:(on|off)', function ($match, $data) {
 echo $Trigger->run('switch:on', 'Чайник'); // Самовар - Включен
 ```
 
-##### Обработчик можно сделать "обрывающим".
+##### Обработчик можно сделать "обрывающим"
 
 На обрывающим обработчике прервётся стек обработки текущего события, если обработчик вернул не null.
 
-Для создания обрывающего обработчика, нужно установить третий (break) параметр в true
+Для создания обрывающего обработчика, нужно установить (break) параметр в true
 
 ```php
 <?php
@@ -125,7 +126,9 @@ $Trigger->add('switch:(on|off)', function ($match, $data) {
         return 'Нет электричества';
     }
 
-}, true); // Добавили break = true
+}, [
+    'break' => true
+]);
 
 // Добавляем обработчик
 $Trigger->add('switch:(on|off)', function ($match, $data) {
@@ -140,6 +143,103 @@ $Trigger->add('switch:(on|off)', function ($match, $data) {
 
 // Запускаем событие
 echo $Trigger->run('switch:on', 'Чайник'); // Нет электричества
+```
+
+##### Позиция в очереди
+С  помощью массива $option можно указать порядок запуска обработчиков.
+
+Рекомендуемые значения от -1 до 1 (по умолчанию 0)
+
+Таким образом с помощью позиции -1 можно ставить выполнение обработчика в самое начало, а с помощью 1, в самый конец.
+
+Используйте метод $Trigger->plan() вместо $Trigger->run() что бы увидеть в какой последовательности будут запущены обработчики события.
+
+```php
+<?php
+use arhone\trigger\Trigger;
+
+$Trigger = new Trigger();
+
+$Trigger->add('hello', function ($match, $data) {
+    return $data . ' дорогой';
+}, [
+    'name'     => 'Второй обработчик',
+    'position' => 0.2
+]);
+$Trigger->add('hello', function ($match, $data) {
+    return $data . ' мой';
+}, [
+    'name'     => 'Первый обработчик',
+    'position' => 0.1
+]);
+$Trigger->add('hello', function ($match, $data) {
+    return $data . ' друг';
+}, [
+    'name'     => 'Третий обработчик',
+    'position' => 0.3
+]);
+
+echo $Trigger->run('hello', 'Привет'); // Привет мой дорогой друг
+
+print_r($Trigger->plan('hello'));
+```
+
+##### Именованный обработчики
+
+Обработчику можно задать уникальное имя.
+
+Как видно из примера выше, имя помогает опознать обработчик при использовании метода "plan".
+
+Так же по имени можно переопределить опции другого обработчика.
+
+```php
+<?php
+use arhone\trigger\Trigger;
+
+$Trigger = new Trigger();
+
+$Trigger->add('test', function ($match, $data) use ($Trigger) {
+
+    $Trigger->option('two', [
+        'status' => false // Второй обработчик не будет запущен
+    ]);
+
+    return 'Первый';
+
+}, [
+    'name' => 'one',
+]);
+
+$Trigger->add('test', function ($match, $data) {
+    return 'Второй';
+}, [
+    'name' => 'two',
+]);
+
+echo $Trigger->run('test'); // Первый
+```
+
+##### Включение \ отключение обработчиков
+
+Опция "status" позволяет отключать ненужные обработчики.
+
+```php
+<?php
+$Trigger = new Trigger();
+
+$Trigger->add('start', function ($match, $data) {
+    return $data . ' раз';
+});
+$Trigger->add('start', function ($match, $data) {
+    return $data . ' два';
+});
+$Trigger->add('start', function ($match, $data) {
+    return $data . ' три';
+}, [
+    'status' => false
+]);
+
+echo $Trigger->run('start'); // раз два
 ```
 
 # Ещё примеры
@@ -191,7 +291,9 @@ $Trigger->add('HTTP:GET:/home.html', function () {
     if (User::id() == false) {
         return 'Нужно авторизироваться';
     }
-}, true);
+}, [
+    'break' => true
+]);
 
 // Или выводим приветствие
 $Trigger->add('HTTP:GET:/home.html', function () {
@@ -241,7 +343,7 @@ $Trigger->add('cache:set', function ($match, $data) {
 
 // Генерируем команду на запись в кэш
 $Trigger->run('cache:set', [
-    'key' => 'ключ', 
+    'key'   => 'ключ',
     'value' => 'данные для кэширования'
 ]);
 ``` 
@@ -257,7 +359,9 @@ $Trigger->add('cache:get', function ($match, $data) {
     if (CacheRedis::status() == true) {
         return CacheRedis::get($data['key']);    
     }
-}, true); // Третий параметр break, остановит стек, если обработчик что-то вернул (не null)
+}, [
+    'break' => true
+]); // Параметр break, остановит стек, если обработчик что-то вернул (не null)
 
 // Если редис ничего не вернул, то запустится следующий обработчик и вернёт кэш из файла
 $Trigger->add('cache:get', function ($match, $data) {

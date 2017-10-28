@@ -16,8 +16,8 @@ class Trigger implements TriggerInterface {
      */
     protected static $config = [
         'option' => [
-            'break' => false,
-            'skip'  => false
+            'break'  => false,
+            'status' => true
         ]
     ];
 
@@ -57,7 +57,7 @@ class Trigger implements TriggerInterface {
      * Устанавливает опции для триггера
      *
      * @param string|int $name
-     * @param array $option ['skip', 'break']
+     * @param array $option ['status', 'break']
      * @return array
      */
     public function option ($name, array $option = []) {
@@ -71,7 +71,7 @@ class Trigger implements TriggerInterface {
      *
      * @param string $pattern
      * @param callable $callback
-     * @param array $option ['skip', 'break']
+     * @param array $option ['status', 'break']
      * @return int|string
      */
     public function add (string $pattern, callable $callback, array $option = []) {
@@ -94,7 +94,7 @@ class Trigger implements TriggerInterface {
             'name'     => $name,
             'pattern'  => $pattern,
             'break'    => $option['break'] ?? self::$config['option']['break'],
-            'skip'     => $option['skip'] ?? self::$config['option']['skip'],
+            'status'   => $option['status'] ?? self::$config['option']['status'],
             'position' => $position
         ];
 
@@ -148,23 +148,21 @@ class Trigger implements TriggerInterface {
 
             if (preg_match('#^' . $handler['pattern'] . '$#ui', $action, $match)) {
 
-                if (self::$option[$handler['name']]['skip']) {
+                if (self::$option[$handler['name']]['status']) {
 
-                    continue;
+                    $result = $handler['callback']->__invoke($match, $data, self::$option[$handler['name']]);
 
-                }
+                    if ($result !== null) {
 
-                $result = $handler['callback']->__invoke($match, $data, self::$option[$handler['name']]);
+                        if (self::$option[$handler['name']]['break']) {
 
-                if ($result !== null) {
+                            return $result;
 
-                    if (self::$option[$handler['name']]['break']) {
+                        } else {
 
-                        return $result;
+                            $data = $result;
 
-                    } else {
-
-                        $data = $result;
+                        }
 
                     }
 
@@ -179,12 +177,12 @@ class Trigger implements TriggerInterface {
     }
 
     /**
-     * Тест триггера
+     * Порядок очереди триггера
      *
      * @param string $action
      * @return array
      */
-    public function stack (string $action) : array {
+    public function plan (string $action) : array {
 
         $data = [];
         $store = &self::$handler;
@@ -216,7 +214,11 @@ class Trigger implements TriggerInterface {
 
             if (preg_match('#^' . $handler['pattern'] . '$#ui', $action, $match)) {
 
-                $data[] = self::$option[$handler['name']];
+                if (self::$option[$handler['name']]['status']) {
+                    
+                    $data[] = self::$option[$handler['name']];
+                    
+                }
 
             }
 

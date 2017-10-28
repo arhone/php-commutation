@@ -166,12 +166,14 @@ $Trigger->add('hello', function ($match, $data) {
     'name'     => 'Второй обработчик',
     'position' => 0.2
 ]);
+
 $Trigger->add('hello', function ($match, $data) {
     return $data . ' мой';
 }, [
     'name'     => 'Первый обработчик',
     'position' => 0.1
 ]);
+
 $Trigger->add('hello', function ($match, $data) {
     return $data . ' друг';
 }, [
@@ -230,9 +232,11 @@ $Trigger = new Trigger();
 $Trigger->add('start', function ($match, $data) {
     return $data . ' раз';
 });
+
 $Trigger->add('start', function ($match, $data) {
     return $data . ' два';
 });
+
 $Trigger->add('start', function ($match, $data) {
     return $data . ' три';
 }, [
@@ -386,9 +390,11 @@ $Trigger = new Trigger();
 $Trigger->add('hello', function ($match, $data) {
     return $data . ' мой';
 });
+
 $Trigger->add('hello', function ($match, $data) {
     return $data . ' дорогой';
 });
+
 $Trigger->add('hello', function ($match, $data) {
     return $data . ' друг';
 });

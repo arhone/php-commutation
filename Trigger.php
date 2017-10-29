@@ -76,6 +76,7 @@ class Trigger implements TriggerInterface {
      */
     public function add (string $pattern, callable $callback, array $option = []) {
 
+        $pattern = strtolower($pattern);
         preg_match('#([.a-z_0-9:]+):#ui', '.:' . $pattern, $match);
 
         $handler = &self::$handler;
@@ -119,6 +120,7 @@ class Trigger implements TriggerInterface {
      */
     public function run (string $action, $data = null) {
 
+        $action = strtolower($action);
         $store = &self::$handler;
         $pattern = explode(':', '.:' . $action);
         array_pop($pattern);
@@ -184,6 +186,7 @@ class Trigger implements TriggerInterface {
      */
     public function plan (string $action) : array {
 
+        $action = strtolower($action);
         $data = [];
         $store = &self::$handler;
         $pattern = explode(':', '.:' . $action);

@@ -17,28 +17,47 @@ interface TriggerInterface {
     public function __construct (array $config = []);
 
     /**
+     * Устанавливает опции для триггера
+     *
+     * @param string|int $name
+     * @param array $option
+     * @return array
+     */
+    public function option ($name, array $option);
+    
+    /**
      * Добавляет обработчик
      *
-     * @param $action
+     * @param string $pattern
      * @param callable $callback
-     * @param bool $break
+     * @param array $option ['status', 'break']
+     * @return int|string
      */
-    public function add ($action, callable $callback, bool $break = false);
-
+    public function add (string $pattern, callable $callback, array $option = []);
+    
     /**
      * Запуск триггера
      *
-     * @param $action
+     * @param string $action
      * @param null $data
-     * @return null
+     * @return mixed
      */
-    public function run ($action, $data = null);
+    public function run (string $action, $data = null);
+
+    /**
+     * Порядок очереди триггера
+     * 
+     * @param string $action
+     * @return array
+     */
+    public function plan (string $action);
 
     /**
      * Метод для конфигурации класса
-     *
+     * 
      * @param array $config
+     * @return array
      */
-    public function config (array $config);
+    public function config (array $config) : array;
 
 }

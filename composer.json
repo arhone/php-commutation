@@ -15,6 +15,7 @@
             "arhone\\trigger\\": ""
         },
         "classmap": [
+            "TriggerInterface.php",
             "Trigger.php"
         ]
     },

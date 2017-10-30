@@ -2,19 +2,6 @@
 
 Триггер - это совокупность события и вызванных им действий.
 
-# Установка
-
-```composer require arhone/trigger```
-
-```php
-<?php
-use arhone\trigger\Trigger;
-include 'vendor/autoload.php';
-
-$Trigger = new Trigger();
-```
-
-# Применение
 Триггер позволяет создавать событийные приложения.
 
 Принцип работы триггера очень прост:

@@ -36,6 +36,12 @@ class Trigger implements TriggerInterface {
     protected static $option = [];
 
     /**
+     * Счёт запусков
+     * @var array
+     */
+    protected static $call = [];
+
+    /**
      * Номер добавляемого обработчика
      *
      * @var int
@@ -116,9 +122,15 @@ class Trigger implements TriggerInterface {
      *
      * @param string $action
      * @param null $data
-     * @return mixed
+     * @return null
+     * @throws \Exception
      */
     public function run (string $action, $data = null) {
+
+        self::$call[$action]++;
+        if (isset(self::$call[$action]) && self::$call[$action] > 10) {
+            throw new \Exception('Trigger: обнаружена рекурсия события "' . $action . '"');
+        }
 
         $action = strtolower($action);
         $store = &self::$handler;

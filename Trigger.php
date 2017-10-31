@@ -15,6 +15,9 @@ class Trigger implements TriggerInterface {
      * @var array
      */
     protected static $config = [
+        'limit' => [
+            'run' => 10
+        ],
         'option' => [
             'break'  => false,
             'status' => true
@@ -37,9 +40,10 @@ class Trigger implements TriggerInterface {
 
     /**
      * Счёт запусков
+     *
      * @var array
      */
-    protected static $call = [];
+    protected static $runCount = [];
 
     /**
      * Номер добавляемого обработчика
@@ -127,8 +131,8 @@ class Trigger implements TriggerInterface {
      */
     public function run (string $action, $data = null) {
 
-        self::$call[$action]++;
-        if (isset(self::$call[$action]) && self::$call[$action] > 10) {
+        self::$runCount[$action]++;
+        if (isset(self::$runCount[$action]) && self::$runCount[$action] > self::$config['limit']['run']) {
             throw new \Exception('Trigger: обнаружена рекурсия события "' . $action . '"');
         }
 

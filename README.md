@@ -312,7 +312,7 @@ echo $Trigger->run('HTTP:GET:/home.html');
 
 ```php
 <?php
-use arhone\trigger\TriggerInterface;
+use arhone\trigger\Trigger;
 
 $Trigger = new Trigger();
 
@@ -331,7 +331,7 @@ $Trigger->run('module.news.add', [
 
 ```php
 <?php
-use arhone\trigger\TriggerInterface;
+use arhone\trigger\Trigger;
 
 $Trigger = new Trigger();
 

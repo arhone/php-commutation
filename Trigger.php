@@ -6,6 +6,7 @@ namespace arhone\trigger;
  *
  * Class Trigger
  * @package arhone\trigger
+ * @author Алексей Арх <info@arh.one>
  */
 class Trigger implements TriggerInterface {
 

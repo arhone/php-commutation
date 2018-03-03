@@ -13,7 +13,8 @@
     "autoload": {
         "psr-4": {
             "arhone\\trigger\\": "source/"
-        }
+        },
+        "classmap": ["source/"]
     },
     "minimum-stability": "stable",
     "require": {

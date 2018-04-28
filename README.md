@@ -35,9 +35,6 @@ $Trigger = new Trigger();
 
 ```php
 <?php
-use arhone\trigger\Trigger;
-
-$Trigger = new Trigger();
 
 // Добавляем обработчик
 $Trigger->add('событие', function () {
@@ -57,9 +54,6 @@ echo $Trigger->run('событие'); // ответ
 
 ```php
 <?php
-use arhone\trigger\Trigger;
-
-$Trigger = new Trigger();
 
 // Добавляем обработчик
 $Trigger->add('switch:(on|off)', function ($match, $data, $option) {
@@ -82,9 +76,6 @@ echo $Trigger->run('switch:on', 'Чайник'); // Чайник - Включе�
 
 ```php
 <?php
-use arhone\trigger\Trigger;
-
-$Trigger = new Trigger();
 
 // Добавляем обработчик
 $Trigger->add('switch:(on|off)', function ($match, $data) {
@@ -108,15 +99,12 @@ echo $Trigger->run('switch:on', 'Чайник'); // Самовар - Включ�
 
 ##### Обработчик можно сделать "обрывающим"
 
-На обрывающим обработчике прервётся стек обработки текущего события, если обработчик вернул не null.
+На обрывающем обработчике прервётся стек обработки текущего события, если обработчик вернул не null.
 
 Для создания обрывающего обработчика, нужно установить (break) параметр в true
 
 ```php
 <?php
-use arhone\trigger\Trigger;
-
-$Trigger = new Trigger();
 
 // Добавляем обрывающий обработчик
 $Trigger->add('switch:(on|off)', function ($match, $data) {
@@ -156,9 +144,6 @@ echo $Trigger->run('switch:on', 'Чайник'); // Нет электричес�
 
 ```php
 <?php
-use arhone\trigger\Trigger;
-
-$Trigger = new Trigger();
 
 $Trigger->add('hello', function ($match, $data) {
     return $data . ' дорогой';
@@ -196,9 +181,6 @@ print_r($Trigger->plan('hello'));
 
 ```php
 <?php
-use arhone\trigger\Trigger;
-
-$Trigger = new Trigger();
 
 $Trigger->add('test', function ($match, $data) use ($Trigger) {
 
@@ -227,7 +209,6 @@ echo $Trigger->run('test'); // Первый
 
 ```php
 <?php
-$Trigger = new Trigger();
 
 $Trigger->add('start', function ($match, $data) {
     return $data . ' раз';
@@ -257,9 +238,6 @@ echo $Trigger->run('start'); // раз два
 
 ```php
 <?php
-use arhone\trigger\Trigger;
-
-$Trigger = new Trigger();
 
 $Trigger->add('HTTP:GET:/home.html', function () {
     return 'hello word'; 
@@ -271,9 +249,6 @@ echo $Trigger->run('HTTP:GET:/home.html');
 
 ```php
 <?php
-use arhone\trigger\Trigger;
-
-$Trigger = new Trigger();
 
 $Trigger->add('console:cache-clear', function () {
     return 'Кэш очищен';
@@ -286,9 +261,6 @@ echo $Trigger->run('console:cache-clear');
 
 ```php
 <?php
-use arhone\trigger\Trigger;
-
-$Trigger = new Trigger();
 
 // Проверяем если пользователь не авторизован
 $Trigger->add('HTTP:GET:/home.html', function () {
@@ -312,9 +284,6 @@ echo $Trigger->run('HTTP:GET:/home.html');
 
 ```php
 <?php
-use arhone\trigger\Trigger;
-
-$Trigger = new Trigger();
 
 // Очищаем кэш новостей
 $Trigger->add('module.news.add', function () {
@@ -331,9 +300,6 @@ $Trigger->run('module.news.add', [
 
 ```php
 <?php
-use arhone\trigger\Trigger;
-
-$Trigger = new Trigger();
 
 // Пишем кэш в Redis
 $Trigger->add('cache:set', function ($match, $data) {
@@ -354,9 +320,6 @@ $Trigger->run('cache:set', [
 
 ```php
 <?php
-use arhone\trigger\Trigger;
-
-$Trigger = new Trigger();
 
 // Берём кэш из редиса, если сервер редиса доступен
 $Trigger->add('cache:get', function ($match, $data) {
@@ -383,9 +346,6 @@ $Trigger->run('cache:get', [
 #### Обработка данных стеком обработчиков.
 ```php
 <?php
-use arhone\trigger\Trigger;
-
-$Trigger = new Trigger();
 
 $Trigger->add('hello', function ($match, $data) {
     return $data . ' мой';

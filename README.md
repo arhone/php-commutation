@@ -241,12 +241,12 @@ echo $Trigger->run('start'); // раз два
 ```php
 <?php
 
-$Trigger->add('HTTP:GET:/home.html', function () {
+$Trigger->add('(http[s]?):get:/home.html', function () {
     return 'hello word'; 
 });
 
 // Пользователь зашёл по HTTP типа GET на страницу /home.html
-echo $Trigger->run('HTTP:GET:/home.html');
+echo $Trigger->run('http:get:/home.html');
 ```
 
 ```php
@@ -265,7 +265,7 @@ echo $Trigger->run('console:cache-clear');
 <?php
 
 // Проверяем если пользователь не авторизован
-$Trigger->add('HTTP:GET:/home.html', function () {
+$Trigger->add('http:get:/home.html', function () {
     if (User::id() == false) {
         return 'Нужно авторизироваться';
     }
@@ -274,12 +274,12 @@ $Trigger->add('HTTP:GET:/home.html', function () {
 ]);
 
 // Или выводим приветствие
-$Trigger->add('HTTP:GET:/home.html', function () {
+$Trigger->add('http:get:/home.html', function () {
     return 'Привет'; 
 });
 
 // Пользователь зашёл по HTTP типа GET на страницу /home.html
-echo $Trigger->run('HTTP:GET:/home.html');
+echo $Trigger->run('http:get:/home.html');
 ``` 
 
 #### Реагирование на события (Observer)
@@ -288,12 +288,12 @@ echo $Trigger->run('HTTP:GET:/home.html');
 <?php
 
 // Очищаем кэш новостей
-$Trigger->add('module.news.add', function () {
-    Cache::clear('module.news');
+$Trigger->add('module:news:add', function () {
+    Cache::clear('module:news');
 });
 
 // Событие что была добавлена новость с id 100
-$Trigger->run('module.news.add', [
+$Trigger->run('module:news:add', [
     'id' => 100
 ]);
 ``` 

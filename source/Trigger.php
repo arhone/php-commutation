@@ -70,11 +70,11 @@ class Trigger implements TriggerInterface {
      *
      * @param string|int $name
      * @param array $option ['status', 'break']
-     * @return array
+     * @return void
      */
-    public function option ($name, array $option = []) {
+    public function option ($name, array $option = []) : void {
         
-        return self::$option[$name] = array_merge(self::$option[$name] ?? [], $option);
+        self::$option[$name] = array_merge(self::$option[$name] ?? [], $option);
         
     }
 
@@ -84,9 +84,9 @@ class Trigger implements TriggerInterface {
      * @param string $pattern
      * @param callable $callback
      * @param array $option ['status', 'break']
-     * @return int|string
+     * @return string
      */
-    public function add (string $pattern, callable $callback, array $option = []) {
+    public function add (string $pattern, callable $callback, array $option = []) : string {
 
         $pattern = strtolower($pattern);
         preg_match('#([.a-z_0-9:]+):#ui', '.:' . $pattern, $match);
@@ -99,7 +99,7 @@ class Trigger implements TriggerInterface {
 
         }
 
-        $name     = $option['name'] ?? self::$i;
+        $name     = (string)($option['name'] ?? self::$i);
         $option   = array_merge($option, self::$option[$name] ?? []);
         $position = (string)(($option['position'] ?? 0) + (self::$i/1000));
 

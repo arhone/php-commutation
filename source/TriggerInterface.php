@@ -23,9 +23,9 @@ interface TriggerInterface {
      *
      * @param string|int $name
      * @param array $option
-     * @return array
+     * @return void
      */
-    public function option ($name, array $option);
+    public function option ($name, array $option) : void;
     
     /**
      * Добавляет обработчик
@@ -33,9 +33,9 @@ interface TriggerInterface {
      * @param string $pattern
      * @param callable $callback
      * @param array $option ['status', 'break']
-     * @return int|string
+     * @return string
      */
-    public function add (string $pattern, callable $callback, array $option = []);
+    public function add (string $pattern, callable $callback, array $option = []) : string;
     
     /**
      * Запуск триггера
@@ -52,7 +52,7 @@ interface TriggerInterface {
      * @param string $action
      * @return array
      */
-    public function plan (string $action);
+    public function plan (string $action) : array;
 
     /**
      * Метод для конфигурации класса

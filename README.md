@@ -4,6 +4,8 @@
 
 Триггер позволяет создавать событийные приложения, запуская события на основе других событий.
 
+Триггер в отличае от роутера создаёт связи не только один к одному, но и один ко многим.
+
 Принцип работы триггера очень прост:
 1) Вы добавляется обработчик какого то события
 2) Запускаете это событие
@@ -21,11 +23,11 @@
 
 # Установка
 
-```composer require arhone/trigger```
+```composer require arhone/commutation```
 
 ```php
 <?php
-use arhone\trigger\Trigger;
+use arhone\commutation\Trigger;
 
 include 'vendor/autoload.php';
 

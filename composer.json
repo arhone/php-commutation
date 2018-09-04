@@ -1,7 +1,7 @@
 {
-    "name": "arhone/trigger",
-    "description": "Триггер (PHP 7)",
-    "homepage": "https://github.com/arhone/trigger",
+    "name": "arhone/commutation",
+    "description": "Библиотека для запуска обработчиков событий (PHP 7)",
+    "homepage": "https://github.com/arhone/commutation",
     "type": "library",
     "license": "MIT",
     "authors": [
@@ -12,7 +12,7 @@
     ],
     "autoload": {
         "psr-4": {
-            "arhone\\trigger\\": "source/"
+            "arhone\\commutation\\": "source/"
         },
         "classmap": ["source/"]
     },

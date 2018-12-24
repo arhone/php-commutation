@@ -128,7 +128,7 @@ class Trigger implements TriggerInterface {
      *
      * @param string $action
      * @param null $data
-     * @return null
+     * @return mixed|null
      * @throws \Exception
      */
     public function run (string $action, $data = null) {

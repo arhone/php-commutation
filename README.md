@@ -31,7 +31,7 @@ use arhone\commutation\Trigger;
 
 include 'vendor/autoload.php';
 
-$Trigger = new Trigger();
+$trigger = new Trigger();
 ```
 
 # Примеры
@@ -40,14 +40,14 @@ $Trigger = new Trigger();
 <?php
 
 // Добавляем обработчик на определённое собыватие
-$Trigger->add('событие', function () {
+$trigger->add('событие', function () {
     return 'ответ';
 });
 
 // Запускаем событие
-echo $Trigger->run('событие'); // ответ
+echo $trigger->run('событие'); // ответ
 
-// триггером для запуска обработчика послужил запуск события $Trigger->run('событие')
+// триггером для запуска обработчика послужил запуск события $trigger->run('событие')
 ```
 
 ##### Триггер понимает регулярные выражения
@@ -61,7 +61,7 @@ echo $Trigger->run('событие'); // ответ
 <?php
 
 // Добавляем обработчик
-$Trigger->add('switch:(on|off)', function ($match, $data, $option) {
+$trigger->add('switch:(on|off)', function ($match, $data, $option) {
 
     if ($match[1] == 'on') {
         return $data . ' - Включен';
@@ -72,7 +72,7 @@ $Trigger->add('switch:(on|off)', function ($match, $data, $option) {
 });
 
 // Запускаем событие
-echo $Trigger->run('switch:on', 'Чайник'); // Чайник - Включен
+echo $trigger->run('switch:on', 'Чайник'); // Чайник - Включен
 ```
 
 ##### Регистрация нескольких обработчиков
@@ -83,12 +83,12 @@ echo $Trigger->run('switch:on', 'Чайник'); // Чайник - Включе�
 <?php
 
 // Добавляем обработчик
-$Trigger->add('switch:(on|off)', function ($match, $data) {
+$trigger->add('switch:(on|off)', function ($match, $data) {
     return 'Самовар';
 });
 
 // Добавляем обработчик
-$Trigger->add('switch:(on|off)', function ($match, $data) {
+$trigger->add('switch:(on|off)', function ($match, $data) {
 
     if ($match[1] == 'on') {
         return $data . ' - Включен';
@@ -99,7 +99,7 @@ $Trigger->add('switch:(on|off)', function ($match, $data) {
 });
 
 // Запускаем событие
-echo $Trigger->run('switch:on', 'Чайник'); // Самовар - Включен
+echo $trigger->run('switch:on', 'Чайник'); // Самовар - Включен
 ```
 
 ##### Обработчик можно сделать "обрывающим"
@@ -112,7 +112,7 @@ echo $Trigger->run('switch:on', 'Чайник'); // Самовар - Включ�
 <?php
 
 // Добавляем обрывающий обработчик
-$Trigger->add('switch:(on|off)', function ($match, $data) {
+$trigger->add('switch:(on|off)', function ($match, $data) {
 
     $energy = false;
     if (!$energy) {
@@ -124,7 +124,7 @@ $Trigger->add('switch:(on|off)', function ($match, $data) {
 ]);
 
 // Добавляем обработчик
-$Trigger->add('switch:(on|off)', function ($match, $data) {
+$trigger->add('switch:(on|off)', function ($match, $data) {
 
     if ($match[1] == 'on') {
         return $data . ' - Включен';
@@ -135,7 +135,7 @@ $Trigger->add('switch:(on|off)', function ($match, $data) {
 });
 
 // Запускаем событие
-echo $Trigger->run('switch:on', 'Чайник'); // Нет электричества
+echo $trigger->run('switch:on', 'Чайник'); // Нет электричества
 ```
 
 ##### Позиция в очереди
@@ -146,35 +146,35 @@ echo $Trigger->run('switch:on', 'Чайник'); // Нет электричес�
 
 Таким образом с помощью позиции -1 можно ставить выполнение обработчика в самое начало, а с помощью 1, в самый конец.
 
-Используйте метод $Trigger->plan() вместо $Trigger->run() что бы увидеть в какой последовательности будут запущены обработчики события.
+Используйте метод $trigger->plan() вместо $trigger->run() что бы увидеть в какой последовательности будут запущены обработчики события.
 
 ```php
 <?php
 
-$Trigger->add('hello', function ($match, $data) {
+$trigger->add('hello', function ($match, $data) {
     return $data . ' дорогой';
 }, [
     'name'     => 'Второй обработчик',
     'position' => 0.2
 ]);
 
-$Trigger->add('hello', function ($match, $data) {
+$trigger->add('hello', function ($match, $data) {
     return $data . ' мой';
 }, [
     'name'     => 'Первый обработчик',
     'position' => 0.1
 ]);
 
-$Trigger->add('hello', function ($match, $data) {
+$trigger->add('hello', function ($match, $data) {
     return $data . ' друг';
 }, [
     'name'     => 'Третий обработчик',
     'position' => 0.3
 ]);
 
-echo $Trigger->run('hello', 'Привет'); // Привет мой дорогой друг
+echo $trigger->run('hello', 'Привет'); // Привет мой дорогой друг
 
-print_r($Trigger->plan('hello'));
+print_r($trigger->plan('hello'));
 ```
 
 ##### Именованный обработчики
@@ -188,9 +188,9 @@ print_r($Trigger->plan('hello'));
 ```php
 <?php
 
-$Trigger->add('test', function ($match, $data) use ($Trigger) {
+$trigger->add('test', function ($match, $data) use ($trigger) {
 
-    $Trigger->option('two', [
+    $trigger->option('two', [
         'status' => false // Второй обработчик не будет запущен
     ]);
 
@@ -200,13 +200,13 @@ $Trigger->add('test', function ($match, $data) use ($Trigger) {
     'name' => 'one',
 ]);
 
-$Trigger->add('test', function ($match, $data) {
+$trigger->add('test', function ($match, $data) {
     return 'Второй';
 }, [
     'name' => 'two',
 ]);
 
-echo $Trigger->run('test'); // Первый
+echo $trigger->run('test'); // Первый
 ```
 
 ##### Включение \ отключение обработчиков
@@ -216,21 +216,21 @@ echo $Trigger->run('test'); // Первый
 ```php
 <?php
 
-$Trigger->add('start', function ($match, $data) {
+$trigger->add('start', function ($match, $data) {
     return $data . ' раз';
 });
 
-$Trigger->add('start', function ($match, $data) {
+$trigger->add('start', function ($match, $data) {
     return $data . ' два';
 });
 
-$Trigger->add('start', function ($match, $data) {
+$trigger->add('start', function ($match, $data) {
     return $data . ' три';
 }, [
     'status' => false
 ]);
 
-echo $Trigger->run('start'); // раз два
+echo $trigger->run('start'); // раз два
 ```
 
 # Ещё примеры
@@ -245,22 +245,22 @@ echo $Trigger->run('start'); // раз два
 ```php
 <?php
 
-$Trigger->add('(http[s]?):get:/home.html', function () {
+$trigger->add('(http[s]?):get:/home.html', function () {
     return 'hello word'; 
 });
 
 // Пользователь зашёл по HTTP типа GET на страницу /home.html
-echo $Trigger->run('http:get:/home.html');
+echo $trigger->run('http:get:/home.html');
 ```
 
 ```php
 <?php
 
-$Trigger->add('console:cache-clear', function () {
+$trigger->add('console:cache-clear', function () {
     return 'Кэш очищен';
 });
 
-echo $Trigger->run('console:cache-clear');
+echo $trigger->run('console:cache-clear');
 ```
 
 #### Внедрение посредников (Middleware)
@@ -269,7 +269,7 @@ echo $Trigger->run('console:cache-clear');
 <?php
 
 // Проверяем если пользователь не авторизован
-$Trigger->add('http:get:/home.html', function () {
+$trigger->add('http:get:/home.html', function () {
     if (User::id() == false) {
         return 'Нужно авторизироваться';
     }
@@ -278,12 +278,12 @@ $Trigger->add('http:get:/home.html', function () {
 ]);
 
 // Или выводим приветствие
-$Trigger->add('http:get:/home.html', function () {
+$trigger->add('http:get:/home.html', function () {
     return 'Привет'; 
 });
 
 // Пользователь зашёл по HTTP типа GET на страницу /home.html
-echo $Trigger->run('http:get:/home.html');
+echo $trigger->run('http:get:/home.html');
 ``` 
 
 #### Реагирование на события (Observer)
@@ -292,12 +292,12 @@ echo $Trigger->run('http:get:/home.html');
 <?php
 
 // Очищаем кэш новостей
-$Trigger->add('module:news:add', function () {
+$trigger->add('module:news:add', function () {
     Cache::clear('module:news');
 });
 
 // Событие что была добавлена новость с id 100
-$Trigger->run('module:news:add', [
+$trigger->run('module:news:add', [
     'id' => 100
 ]);
 ``` 
@@ -308,17 +308,17 @@ $Trigger->run('module:news:add', [
 <?php
 
 // Пишем кэш в Redis
-$Trigger->add('cache:set', function ($match, $data) {
+$trigger->add('cache:set', function ($match, $data) {
     CacheRedis::set($data['key'], $data['value']);
 });
 
 // Пишем в файл на всякий случай
-$Trigger->add('cache:set', function ($match, $data) {
+$trigger->add('cache:set', function ($match, $data) {
     CacheFile::set($data['key'], $data['value']);
 });
 
 // Генерируем команду на запись в кэш
-$Trigger->run('cache:set', [
+$trigger->run('cache:set', [
     'key'   => 'ключ',
     'value' => 'данные для кэширования'
 ]);
@@ -328,7 +328,7 @@ $Trigger->run('cache:set', [
 <?php
 
 // Берём кэш из редиса, если сервер редиса доступен
-$Trigger->add('cache:get', function ($match, $data) {
+$trigger->add('cache:get', function ($match, $data) {
     if (CacheRedis::status() == true) {
         return CacheRedis::get($data['key']);    
     }
@@ -337,14 +337,14 @@ $Trigger->add('cache:get', function ($match, $data) {
 ]); // Параметр break, остановит стек, если обработчик что-то вернул (не null)
 
 // Если редис ничего не вернул, то запустится следующий обработчик и вернёт кэш из файла
-$Trigger->add('cache:get', function ($match, $data) {
+$trigger->add('cache:get', function ($match, $data) {
    if (CacheFile::status() == true) {
        return CacheFile::get($data['key']);
    }
 });
 
 // Генерируем команду на получение кэша
-$Trigger->run('cache:get', [
+$trigger->run('cache:get', [
     'key' => 'ключ'
 ]);
 ``` 
@@ -353,17 +353,17 @@ $Trigger->run('cache:get', [
 ```php
 <?php
 
-$Trigger->add('hello', function ($match, $data) {
+$trigger->add('hello', function ($match, $data) {
     return $data . ' мой';
 });
 
-$Trigger->add('hello', function ($match, $data) {
+$trigger->add('hello', function ($match, $data) {
     return $data . ' дорогой';
 });
 
-$Trigger->add('hello', function ($match, $data) {
+$trigger->add('hello', function ($match, $data) {
     return $data . ' друг';
 });
 
-echo $Trigger->run('hello', 'Привет'); // Привет мой дорогой друг
+echo $trigger->run('hello', 'Привет'); // Привет мой дорогой друг
 ``` 

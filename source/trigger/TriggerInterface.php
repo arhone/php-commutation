@@ -1,12 +1,12 @@
 <?php declare(strict_types = 1);
 
-namespace arhone\commutation;
+namespace arhone\commutation\trigger;
 
 /**
  * Триггер
  *
  * Interface TriggerInterface
- * @package arhone\commutation
+ * @package arhone\commutation\trigger
  * @author Алексей Арх <info@arh.one>
  */
 interface TriggerInterface {

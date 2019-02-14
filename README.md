@@ -27,7 +27,7 @@
 
 ```php
 <?php
-use arhone\commutation\Trigger;
+use arhone\commutation\trigger\Trigger;
 
 include 'vendor/autoload.php';
 

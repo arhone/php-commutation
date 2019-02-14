@@ -2,6 +2,6 @@
 
 return [
     'Trigger' => [
-        'class' => 'arhone\commutation\Trigger'
+        'class' => 'arhone\commutation\trigger\Trigger'
     ]
 ];
